@@ -19,16 +19,16 @@ model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instr
 st.title("Pega Tutor Application")
 
 # Get user input
-user_prompt = st.text_area("Enter your query:", placeholder="Type your query here...", key="user_prompt", on_change=generate_response)
+user_prompt = st.text_area("Enter your query:", placeholder="Type your query here...", key="user_prompt", on_change=lambda: generate_response(user_prompt))
 
-def generate_response():
-    if st.session_state.get('user_prompt'):
+def generate_response(prompt):
+    if prompt:
         # Generate response from the model
-        response = model.generate_content(st.session_state['user_prompt'])
+        response = model.generate_content(prompt)
         st.session_state['response'] = response.text
         st.write(st.session_state['response'])
     else:
         st.write("Please enter a query before clicking the button.")
 
 if st.button("Generate Answer"):
-    generate_response()
+    generate_response(st.session_state.get('user_prompt', ''))
