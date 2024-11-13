@@ -1,10 +1,5 @@
 import google.generativeai as genai
 import streamlit as st
-from PIL import Image
-
-# Add the image at the top
-image = Image.open('pegachatbot.py')
-st.image(image, caption='Pega Chatbot', use_column_width=True)
 
 # Configure API key
 genai.configure(api_key="AIzaSyDhzLev5d_V46XA7KQrmg4u90M_g2Xq8Kc")
@@ -37,6 +32,7 @@ st.text_input("Enter your query:", placeholder="Type your query here...", key="u
 
 # Button for generating a response
 btn_click = st.button("Generate Answer")
+
 if btn_click:
     generate_response()
 
