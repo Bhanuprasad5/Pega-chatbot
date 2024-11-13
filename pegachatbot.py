@@ -20,13 +20,22 @@ def generate_response():
     user_prompt = st.session_state.user_prompt
     if user_prompt:
         response = model.generate_content(user_prompt)
-        st.write(response.text)
+        st.session_state.response_text = response.text
     else:
-        st.write("Please enter a query before pressing Enter.")
+        st.session_state.response_text = "Please enter a query before pressing Enter."
 
 # Streamlit interface setup
 st.title("Pega Tutor Application")
 
-# Get user input and generate response on Enter
+# Get user input
 st.text_input("Enter your query:", placeholder="Type your query here...", key="user_prompt", on_change=generate_response)
 
+# Button for generating a response
+btn_click = st.button("Generate Answer")
+
+if btn_click:
+    generate_response()
+
+# Display the response
+if 'response_text' in st.session_state:
+    st.write(st.session_state.response_text)
