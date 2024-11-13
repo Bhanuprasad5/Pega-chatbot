@@ -19,15 +19,20 @@ model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instr
 st.title("Pega Tutor Application")
 
 # Get user input
-user_prompt = st.text_input("Enter your query:", placeholder="Type your query here...")
+user_prompt = st.text_area("Enter your query:", placeholder="Type your query here...", key="user_prompt")
 
-# Button for generating a response
-btn_click = st.button("Generate Answer")
-
-if btn_click:
+# Generate response when "Enter" key is pressed
+if st.button("Generate Answer") or (st.session_state.get('user_prompt_event') == 'keydown' and st.session_state.get('user_prompt_event_data', {}).get('key') == 'Enter'):
     if user_prompt:
         # Generate response from the model
         response = model.generate_content(user_prompt)
         st.write(response.text)
     else:
         st.write("Please enter a query before clicking the button.")
+
+# Store the "keydown" event details
+def store_event(event):
+    st.session_state['user_prompt_event'] = event.type
+    st.session_state['user_prompt_event_data'] = event.event_data
+
+st.text_area_callback(store_event, key="user_prompt")
