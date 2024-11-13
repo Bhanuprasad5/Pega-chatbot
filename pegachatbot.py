@@ -15,19 +15,18 @@ remind them to ask questions only related to Pega systems and tools."""
 # Initialize the generative model
 model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instruction=sys_prompt)
 
-# Streamlit interface setup
-st.title("Pega Tutor Application")
-
-# Get user input
-user_prompt = st.text_input("Enter your query:", placeholder="Type your query here...")
-
-# Button for generating a response
-btn_click = st.button("Generate Answer")
-
-if btn_click:
+# Function to generate response
+def generate_response():
+    user_prompt = st.session_state.user_prompt
     if user_prompt:
-        # Generate response from the model
         response = model.generate_content(user_prompt)
         st.write(response.text)
     else:
-        st.write("Please enter a query before clicking the button.")
+        st.write("Please enter a query before pressing Enter.")
+
+# Streamlit interface setup
+st.title("Pega Tutor Application")
+
+# Get user input and generate response on Enter
+st.text_input("Enter your query:", placeholder="Type your query here...", key="user_prompt", on_change=generate_response)
+
