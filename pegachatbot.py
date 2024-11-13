@@ -2,42 +2,17 @@ import google.generativeai as genai
 import streamlit as st
 from PIL import Image
 
-# Set up Streamlit page configuration with an engaging title
-st.set_page_config(page_title="AI-Powered Pega Tutor", page_icon="🎓", layout="centered")
+# Set up Streamlit page configuration
+st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="centered")
 
-# Add a background image or color gradient (CSS hack)
-st.markdown(
-    """
-    <style>
-        .main {
-            background: linear-gradient(to right, #ece9e6, #ffffff);
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .stButton > button {
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-            width: 100%;
-            padding: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .stTextInput {
-            border-radius: 8px;
-        }
-    </style>
-    """, unsafe_allow_html=True
-)
-
-# Logo and Hero Section
+# Load and display logo/image
 image = Image.open("pega.jpeg")
 col1, col2 = st.columns([1, 3])
 with col1:
     st.image(image, width=120)
 with col2:
-    st.title("AI-Powered Pega Tutor")
-    st.write("🌐 **Your Personal Pega Guide**")
-    st.write("Get expert answers to all your Pega-related queries, directly from an AI tutor with 20 years of experience!")
+    st.title("Pega Tutor Application")
+    st.write("An expert AI-powered tutor to help with your Pega-related questions.")
 
 # Configure API key
 genai.configure(api_key="AIzaSyDhzLev5d_V46XA7KQrmg4u90M_g2Xq8Kc")
@@ -58,33 +33,32 @@ model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instr
 def generate_response():
     user_prompt = st.session_state.user_prompt
     if user_prompt:
-        with st.spinner("Generating an answer for you..."):
+        with st.spinner("Generating answer..."):
             response = model.generate_content(user_prompt)
             st.session_state.response_text = response.text
     else:
         st.session_state.response_text = "Please enter a query before pressing Enter."
 
-# User input section with chat-like style
-st.subheader("Ask Your Pega-Related Question Below:")
+# User input section
+st.subheader("Ask your Pega-related question:")
 st.text_input(
-    "Type your question here:", 
+    "Enter your question below:", 
     placeholder="E.g., How does Pega manage workflows?", 
     key="user_prompt", 
     on_change=generate_response,
 )
 
-# Button with improved styling
-btn_click = st.button("Get Answer 🎓")
+# Button for generating a response
+btn_click = st.button("Generate Answer")
 
 if btn_click:
     generate_response()
 
-# Display the response with a chat bubble-like format
+# Display the response with a chat-style format
 if 'response_text' in st.session_state:
     st.markdown("#### Tutor's Response:")
-    st.write(f"💬: {st.session_state.response_text}")
+    st.write(f"🧑‍🏫: {st.session_state.response_text}")
 
-# Footer note
+# Display footer or additional help text
 st.write("---")
-st.info("This AI Tutor is dedicated to answering questions specifically about the Pega platform. For other topics, please use additional resources.")
-
+st.info("Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.")
