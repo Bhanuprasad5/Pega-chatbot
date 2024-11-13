@@ -1,6 +1,9 @@
 import google.generativeai as genai
 import streamlit as st
 
+image = Image.open("pega.jpeg")
+st.image(image, use_column_width=True)
+
 # Configure API key
 genai.configure(api_key="AIzaSyDhzLev5d_V46XA7KQrmg4u90M_g2Xq8Kc")
 
