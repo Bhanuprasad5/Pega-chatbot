@@ -22,7 +22,7 @@ st.title("Pega Tutor Application")
 user_prompt = st.text_area("Enter your query:", placeholder="Type your query here...", key="user_prompt")
 
 # Generate response when "Enter" key is pressed
-if st.button("Generate Answer") or (st.session_state.get('user_prompt_event') == 'keydown' and st.session_state.get('user_prompt_event_data', {}).get('key') == 'Enter'):
+if st.button("Generate Answer") or (st.session_state.get('key_pressed') == 'Enter'):
     if user_prompt:
         # Generate response from the model
         response = model.generate_content(user_prompt)
@@ -31,8 +31,7 @@ if st.button("Generate Answer") or (st.session_state.get('user_prompt_event') ==
         st.write("Please enter a query before clicking the button.")
 
 # Store the "keydown" event details
-def store_event(event):
-    st.session_state['user_prompt_event'] = event.type
-    st.session_state['user_prompt_event_data'] = event.event_data
+def store_key(event):
+    st.session_state['key_pressed'] = event.event_data['key']
 
-st.text_area_callback(store_event, key="user_prompt")
+st.text_area(key="user_prompt", on_change=store_key)
