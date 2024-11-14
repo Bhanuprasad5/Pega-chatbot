@@ -63,30 +63,46 @@ with chat_container:
         st.markdown(f"**You**: {entry['question']}")
         st.write(f"🧑‍🏫: {entry['answer']}")
 
-# Fixed position for the input field at the bottom with CSS styling
+# Fixed position for the note and input field at the bottom with CSS styling
 st.markdown(
     """
     <style>
     .stTextInput {
         position: fixed;
         bottom: 10px;
+        width: 95%;
+        margin-left: 2.5%;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 8px;
+        background-color: #1e1e1e;
+        color: white;
+    }
+    .note {
+        position: fixed;
+        bottom: 55px;
         width: 90%;
         margin-left: 5%;
+        font-size: 10px;
+        color: #bbb;
+        text-align: center;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
+# Display footer or additional help text with fixed positioning
+st.markdown(
+    "<div class='note'>Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.</div>",
+    unsafe_allow_html=True
+)
+
 # Input field for the user's question
 st.text_input(
     "Enter your question below:", 
-    placeholder="E.g., How does Pega manage workflows?", 
+    placeholder="Say Something...", 
     key="user_prompt", 
     on_change=generate_response,
     label_visibility="collapsed"
 )
-
-# Display footer or additional help text
-st.write("---")
-st.info("Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.")
