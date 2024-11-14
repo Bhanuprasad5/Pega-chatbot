@@ -41,8 +41,9 @@ def generate_response():
             response = model.generate_content(user_prompt)
             st.session_state.response_text = response.text
             # Store user question and AI response in the chat history
-            st.session_state.chat_history.append(("You", user_prompt))
-            st.session_state.chat_history.append(("Tutor", st.session_state.response_text))
+            question_number = len(st.session_state.chat_history) // 2 + 1  # Calculate question number
+            st.session_state.chat_history.append((f"Question {question_number}", user_prompt))
+            st.session_state.chat_history.append((f"Answer {question_number}", st.session_state.response_text))
     else:
         st.session_state.response_text = "Please enter a query before pressing Enter."
 
@@ -61,13 +62,13 @@ btn_click = st.button("Generate Answer")
 if btn_click:
     generate_response()
 
-# Display chat history
+# Display chat history with question and answer numbers
 st.sidebar.title("Chat History")
-for sender, message in st.session_state.chat_history:
-    if sender == "You":
-        st.sidebar.markdown(f"**You**: {message}")
+for idx, (label, message) in enumerate(st.session_state.chat_history):
+    if "Question" in label:
+        st.sidebar.markdown(f"**{label}**: {message}")
     else:
-        st.sidebar.markdown(f"**Tutor**: {message}")
+        st.sidebar.markdown(f"**{label}**: {message}")
 
 # Display the response
 if 'response_text' in st.session_state:
