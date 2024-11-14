@@ -70,21 +70,21 @@ st.markdown(
     .stTextInput {
         position: fixed;
         bottom: 10px;
-        width: 95%;
-        margin-left: 2.5%;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        padding: 8px;
-        background-color: #1e1e1e;
+        width: 90%;
+        left: 5%;
+        border-radius: 20px;
+        border: 1px solid #555;
+        padding: 12px;
+        background-color: #333;
         color: white;
     }
     .note {
         position: fixed;
-        bottom: 55px;
+        bottom: 60px;
         width: 90%;
-        margin-left: 5%;
-        font-size: 10px;
-        color: #bbb;
+        left: 5%;
+        font-size: 14px;
+        color: #aaa;
         text-align: center;
     }
     </style>
