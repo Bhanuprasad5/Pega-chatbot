@@ -48,7 +48,7 @@ def generate_response():
         st.session_state.response_text = "Please enter a query before pressing Enter."
 
 # Input from the user using chat_input
-human_prompt = st.chat_input("Say Something...")
+human_prompt = st.chat_input(" Message Pega ...")
 
 if human_prompt:
     st.session_state.user_prompt = human_prompt
