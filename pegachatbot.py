@@ -33,20 +33,20 @@ model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instr
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 
-# Function to generate response
-# def generate_response():
-#     user_prompt = st.session_state.user_prompt
-#     if user_prompt:
-#         with st.spinner("Generating answer..."):
-#             response = model.generate_content(user_prompt)
-#             st.session_state.response_text = response.text
-#             # Store user question and AI response in the chat history
-#             question_number = len(st.session_state.chat_history) // 2 + 1  # Calculate question number
-#             truncated_question = user_prompt[:30]  # Truncate question to first 30 characters
-#             st.session_state.chat_history.append((f"Question: {truncated_question}", user_prompt))
-#             st.session_state.chat_history.append((f"Answer {question_number}", st.session_state.response_text))
-#     else:
-#         st.session_state.response_text = "Please enter a query before pressing Enter."
+Function to generate response
+def generate_response():
+    user_prompt = st.session_state.user_prompt
+    if user_prompt:
+        with st.spinner("Generating answer..."):
+            response = model.generate_content(user_prompt)
+            st.session_state.response_text = response.text
+            # Store user question and AI response in the chat history
+            question_number = len(st.session_state.chat_history) // 2 + 1  # Calculate question number
+            truncated_question = user_prompt[:30]  # Truncate question to first 30 characters
+            st.session_state.chat_history.append((f"Question: {truncated_question}", user_prompt))
+            st.session_state.chat_history.append((f"Answer {question_number}", st.session_state.response_text))
+    else:
+        st.session_state.response_text = "Please enter a query before pressing Enter."
 
 # Input from the user using chat_input
 human_prompt = st.chat_input(" Message Pega ...")
