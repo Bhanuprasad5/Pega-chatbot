@@ -62,13 +62,16 @@ btn_click = st.button("Generate Answer")
 if btn_click:
     generate_response()
 
-# Display chat history with question and answer numbers
+# Display chat history with collapsible question/answer sections
 st.sidebar.title("Chat History")
 for idx, (label, message) in enumerate(st.session_state.chat_history):
     if "Question" in label:
-        st.sidebar.markdown(f"**{label}**: {message}")
-    else:
-        st.sidebar.markdown(f"**{label}**: {message}")
+        with st.sidebar.expander(f"{label}"):
+            st.markdown(f"**{label}**: {message}")
+            # Find and display the corresponding answer
+            answer_label = f"Answer {idx // 2 + 1}"
+            answer_message = st.session_state.chat_history[idx + 1][1] if idx + 1 < len(st.session_state.chat_history) else ""
+            st.markdown(f"**{answer_label}**: {answer_message}")
 
 # Display the response
 if 'response_text' in st.session_state:
