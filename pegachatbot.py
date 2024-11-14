@@ -10,6 +10,7 @@ if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 if 'response_text' not in st.session_state:
     st.session_state.response_text = ""
+
 # Load and display logo/image
 image = Image.open("pega.jpeg")
 col1, col2 = st.columns([1, 3])
@@ -55,7 +56,7 @@ with st.sidebar:
 
 # Main section for user input and response
 st.subheader("Ask your Pega-related question:")
-st.text_input(
+input_query = st.text_input(
     "Enter your question below:", 
     placeholder="E.g., How does Pega manage workflows?", 
     key="user_prompt",
@@ -65,7 +66,7 @@ st.text_input(
 # Fixed button at the bottom for generating response
 btn_click = st.button("Generate Answer")
 
-if btn_click:
+if btn_click and input_query:
     generate_response()
 
 # Display the response with a chat-style format
@@ -81,7 +82,7 @@ st.info("Note: This AI Tutor answers questions specifically about the Pega platf
 st.markdown(
     """
     <style>
-    .stTextInput > div > div > input {
+    input[type='text'] {
         position: fixed;
         bottom: 0;
         left: 0;
