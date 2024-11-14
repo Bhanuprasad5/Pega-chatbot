@@ -41,9 +41,9 @@ def generate_response():
             response = model.generate_content(user_prompt)
             st.session_state.response_text = response.text
             # Store user question and AI response in the chat history
-            question_number = len(st.session_state.chat_history) // 2 + 1  # Calculate question number
-            st.session_state.chat_history.append((f"Question {question_number}", user_prompt))
-            st.session_state.chat_history.append((f"Answer {question_number}", st.session_state.response_text))
+            question_snippet = user_prompt[:30]  # Get the first 30 characters of the question
+            st.session_state.chat_history.append((f"Q: {question_snippet}", user_prompt))
+            st.session_state.chat_history.append((f"A: {question_snippet}", st.session_state.response_text))
     else:
         st.session_state.response_text = "Please enter a query before pressing Enter."
 
@@ -57,11 +57,11 @@ if human_prompt:
 # Display chat history with collapsible question/answer sections
 st.sidebar.title("Chat History")
 for idx, (label, message) in enumerate(st.session_state.chat_history):
-    if "Question" in label:
+    if "Q:" in label:
         with st.sidebar.expander(f"{label}"):
             st.markdown(f"**{label}**: {message}")
             # Find and display the corresponding answer
-            answer_label = f"Answer {idx // 2 + 1}"
+            answer_label = f"A: {label[2:]}"  # Get corresponding answer snippet
             answer_message = st.session_state.chat_history[idx + 1][1] if idx + 1 < len(st.session_state.chat_history) else ""
             st.markdown(f"**{answer_label}**: {answer_message}")
 
