@@ -5,9 +5,15 @@ from PIL import Image
 # Set up Streamlit page configuration
 st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="wide")
 
+# Initialize session states
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+if 'response_text' not in st.session_state:
+    st.session_state.response_text = ""
+
 # Load and display logo/image
 image = Image.open("pega.jpeg")
-col1, col2 = st.columns([1, 4])
+col1, col2 = st.columns([1, 3])
 with col1:
     st.image(image, width=120)
 with col2:
@@ -29,54 +35,63 @@ decline and remind them to ask questions only related to Pega platform.
 # Initialize the generative model
 model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instruction=sys_prompt)
 
-# Initialize session state for chat history
-if 'chat_history' not in st.session_state:
-    st.session_state.chat_history = []
-
 # Function to generate response
 def generate_response():
     user_prompt = st.session_state.user_prompt
     if user_prompt:
         with st.spinner("Generating answer..."):
             response = model.generate_content(user_prompt)
-            # Append user question and model response to chat history
-            st.session_state.chat_history.append((user_prompt, response.text))
-            st.session_state.user_prompt = ""  # Clear the input after processing
+            st.session_state.response_text = response.text
+            # Store question and answer in chat history
+            st.session_state.chat_history.append({"user": user_prompt, "tutor": response.text})
+    else:
+        st.session_state.response_text = "Please enter a query before pressing Enter."
 
 # Sidebar for chat history
 with st.sidebar:
     st.header("Chat History")
-    for idx, (question, answer) in enumerate(st.session_state.chat_history):
-        st.write(f"**Q{idx + 1}:** {question}")
-        st.write(f"**A{idx + 1}:** {answer}")
+    for i, chat in enumerate(st.session_state.chat_history):
+        st.write(f"**Q{i+1}:** {chat['user']}")
+        st.write(f"**A{i+1}:** {chat['tutor']}")
 
-# Main area for displaying questions and answers
-st.write("### Session Q&A:")
-container = st.container()  # Container to hold chat messages
-
-# Display the current session's Q&A
-with container:
-    for idx, (question, answer) in enumerate(st.session_state.chat_history):
-        st.write(f"**Question {idx + 1}:** {question}")
-        st.write(f"**Answer {idx + 1}:** 🧑‍🏫: {answer}")
-
-# Spacer to push the input field to the bottom
-st.write("\n" * 10)
-
-# Fixed input bar at the bottom
+# Main section for user input and response
+st.subheader("Ask your Pega-related question:")
 st.text_input(
-    "Ask your Pega-related question:",
-    placeholder="E.g., How does Pega manage workflows?",
-    key="user_prompt",
+    "Enter your question below:", 
+    placeholder="E.g., How does Pega manage workflows?", 
+    key="user_prompt", 
     on_change=generate_response,
 )
 
-# Button for generating a response (optional, may be used as a secondary way to submit input)
+# Fixed button at the bottom for generating response
 btn_click = st.button("Generate Answer")
 
 if btn_click:
     generate_response()
 
-# Footer or additional help text
+# Display the response with a chat-style format
+if 'response_text' in st.session_state and st.session_state.response_text:
+    st.markdown("#### Tutor's Response:")
+    st.write(f"🧑‍🏫: {st.session_state.response_text}")
+
+# Display footer or additional help text
 st.write("---")
 st.info("Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.")
+
+# CSS for fixing the input bar at the bottom
+st.markdown(
+    """
+    <style>
+    .stTextInput > div > div > input {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+        z-index: 1000;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
