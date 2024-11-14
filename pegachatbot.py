@@ -103,6 +103,5 @@ st.text_input(
     "Enter your question below:", 
     placeholder="Say Something...", 
     key="user_prompt", 
-    on_change=generate_response,
-    label_visibility="collapsed"
+    on_change=generate_response
 )
