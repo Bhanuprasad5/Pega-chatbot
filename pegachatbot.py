@@ -12,9 +12,12 @@ if 'chat_history' not in st.session_state:
 
 def display_chat_history():
     for i, entry in enumerate(st.session_state['chat_history']):
+        question = entry.get('question', 'N/A')
+        answer = entry.get('answer', 'N/A')
         with st.sidebar.expander(f"Question {i + 1}", expanded=False):
-            st.write(f"**Q:** {entry['question']}")
-            st.write(f"**A:** {entry['answer']}")
+            st.write(f"**Q:** {question}")
+            st.write(f"**A:** {answer}")
+
 
 # Display chat history in the sidebar
 display_chat_history()
