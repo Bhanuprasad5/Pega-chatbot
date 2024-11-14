@@ -55,7 +55,7 @@ if human_prompt:
     generate_response()
 
 # Button for generating a response
-btn_click = st.button("Generate Answer")
+#btn_click = st.button("Generate Answer")
 
 if btn_click:
     generate_response()
