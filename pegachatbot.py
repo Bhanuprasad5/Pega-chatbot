@@ -10,7 +10,6 @@ if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 if 'response_text' not in st.session_state:
     st.session_state.response_text = ""
-
 # Load and display logo/image
 image = Image.open("pega.jpeg")
 col1, col2 = st.columns([1, 3])
