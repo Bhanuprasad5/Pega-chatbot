@@ -78,4 +78,3 @@ if 'response_text' in st.session_state:
 
 # Display footer or additional help text
 st.write("---")
-st.info("Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.")
