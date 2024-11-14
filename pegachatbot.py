@@ -58,12 +58,7 @@ for user_question, ai_response in st.session_state.chat_history:
     st.write("---")
 
 # Bottom input area fixed with `st.text_input` for user prompt
-st.text_input(
-    "Enter your question below:", 
-    placeholder="E.g., How does Pega manage workflows?", 
-    key="user_prompt", 
-    on_change=generate_response,
-    label_visibility="collapsed",
-)
+# Input from the user
+key = st.chat_input("Say Something...")
 
 
