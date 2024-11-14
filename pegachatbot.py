@@ -3,11 +3,11 @@ import streamlit as st
 from PIL import Image
 
 # Set up Streamlit page configuration
-st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="centered")
+st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="wide")
 
 # Load and display logo/image
 image = Image.open("pega.jpeg")
-col1, col2 = st.columns([1, 3])
+col1, col2 = st.columns([1, 4])
 with col1:
     st.image(image, width=120)
 with col2:
@@ -29,17 +29,28 @@ decline and remind them to ask questions only related to Pega platform.
 # Initialize the generative model
 model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instruction=sys_prompt)
 
+# Initialize session state for chat history
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+
 # Function to generate response
 def generate_response():
     user_prompt = st.session_state.user_prompt
     if user_prompt:
         with st.spinner("Generating answer..."):
             response = model.generate_content(user_prompt)
-            st.session_state.response_text = response.text
-    else:
-        st.session_state.response_text = "Please enter a query before pressing Enter."
+            # Add user question and model response to chat history
+            st.session_state.chat_history.append((user_prompt, response.text))
+            st.session_state.user_prompt = ""  # Clear the input after processing
 
-# User input section
+# Sidebar for chat history
+with st.sidebar:
+    st.header("Chat History")
+    for idx, (question, answer) in enumerate(st.session_state.chat_history):
+        st.write(f"**Q{idx + 1}:** {question}")
+        st.write(f"**A{idx + 1}:** {answer}")
+
+# Main input section (fixed search bar)
 st.subheader("Ask your Pega-related question:")
 st.text_input(
     "Enter your question below:", 
@@ -54,11 +65,13 @@ btn_click = st.button("Generate Answer")
 if btn_click:
     generate_response()
 
-# Display the response with a chat-style format
-if 'response_text' in st.session_state:
-    st.markdown("#### Tutor's Response:")
-    st.write(f"🧑‍🏫: {st.session_state.response_text}")
+# Display the current session's Q&A
+if st.session_state.chat_history:
+    st.write("### Session Q&A:")
+    for idx, (question, answer) in enumerate(st.session_state.chat_history):
+        st.write(f"**Question {idx + 1}:** {question}")
+        st.write(f"**Answer {idx + 1}:** 🧑‍🏫: {answer}")
 
-# Display footer or additional help text
+# Footer or additional help text
 st.write("---")
 st.info("Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.")
