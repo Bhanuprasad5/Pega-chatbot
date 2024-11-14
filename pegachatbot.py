@@ -42,7 +42,8 @@ def generate_response():
             st.session_state.response_text = response.text
             # Store user question and AI response in the chat history
             question_number = len(st.session_state.chat_history) // 2 + 1  # Calculate question number
-            st.session_state.chat_history.append((f"Question {question_number}", user_prompt))
+            truncated_question = user_prompt[:30]  # Truncate question to first 30 characters
+            st.session_state.chat_history.append((f"Question: {truncated_question}", user_prompt))
             st.session_state.chat_history.append((f"Answer {question_number}", st.session_state.response_text))
     else:
         st.session_state.response_text = "Please enter a query before pressing Enter."
