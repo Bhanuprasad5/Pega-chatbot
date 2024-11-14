@@ -47,14 +47,12 @@ def generate_response():
     else:
         st.session_state.response_text = "Please enter a query before pressing Enter."
 
-# User input section
-st.subheader("Ask your Pega-related question:")
-st.text_input(
-    "Enter your question below:", 
-    placeholder="E.g., How does Pega manage workflows?", 
-    key="user_prompt", 
-    on_change=generate_response,
-)
+# Input from the user using chat_input
+human_prompt = st.chat_input("Say Something...")
+
+if human_prompt:
+    st.session_state.user_prompt = human_prompt
+    generate_response()
 
 # Button for generating a response
 btn_click = st.button("Generate Answer")
