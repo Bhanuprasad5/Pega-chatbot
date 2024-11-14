@@ -39,7 +39,7 @@ def generate_response():
     if user_prompt:
         with st.spinner("Generating answer..."):
             response = model.generate_content(user_prompt)
-            # Add user question and model response to chat history
+            # Append user question and model response to chat history
             st.session_state.chat_history.append((user_prompt, response.text))
             st.session_state.user_prompt = ""  # Clear the input after processing
 
@@ -50,27 +50,32 @@ with st.sidebar:
         st.write(f"**Q{idx + 1}:** {question}")
         st.write(f"**A{idx + 1}:** {answer}")
 
-# Main input section (fixed search bar)
-st.subheader("Ask your Pega-related question:")
+# Main area for displaying questions and answers
+st.write("### Session Q&A:")
+container = st.container()  # Container to hold chat messages
+
+# Display the current session's Q&A
+with container:
+    for idx, (question, answer) in enumerate(st.session_state.chat_history):
+        st.write(f"**Question {idx + 1}:** {question}")
+        st.write(f"**Answer {idx + 1}:** 🧑‍🏫: {answer}")
+
+# Spacer to push the input field to the bottom
+st.write("\n" * 10)
+
+# Fixed input bar at the bottom
 st.text_input(
-    "Enter your question below:", 
-    placeholder="E.g., How does Pega manage workflows?", 
-    key="user_prompt", 
+    "Ask your Pega-related question:",
+    placeholder="E.g., How does Pega manage workflows?",
+    key="user_prompt",
     on_change=generate_response,
 )
 
-# Button for generating a response
+# Button for generating a response (optional, may be used as a secondary way to submit input)
 btn_click = st.button("Generate Answer")
 
 if btn_click:
     generate_response()
-
-# Display the current session's Q&A
-if st.session_state.chat_history:
-    st.write("### Session Q&A:")
-    for idx, (question, answer) in enumerate(st.session_state.chat_history):
-        st.write(f"**Question {idx + 1}:** {question}")
-        st.write(f"**Answer {idx + 1}:** 🧑‍🏫: {answer}")
 
 # Footer or additional help text
 st.write("---")
