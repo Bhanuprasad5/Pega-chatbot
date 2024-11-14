@@ -37,7 +37,7 @@ model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instr
 
 # Function to generate response
 def generate_response():
-    user_prompt = st.session_state.user_prompt
+    user_prompt = st.session_state.get("user_prompt", "")
     if user_prompt:
         with st.spinner("Generating answer..."):
             response = model.generate_content(user_prompt)
@@ -59,7 +59,7 @@ st.subheader("Ask your Pega-related question:")
 st.text_input(
     "Enter your question below:", 
     placeholder="E.g., How does Pega manage workflows?", 
-    key="user_prompt", 
+    key="user_prompt",
     on_change=generate_response,
 )
 
