@@ -54,12 +54,6 @@ if human_prompt:
     st.session_state.user_prompt = human_prompt
     generate_response()
 
-# Button for generating a response
-btn_click = st.button("Generate Answer")
-
-if btn_click:
-    generate_response()
-
 # Display chat history with collapsible question/answer sections
 st.sidebar.title("Chat History")
 for idx, (label, message) in enumerate(st.session_state.chat_history):
