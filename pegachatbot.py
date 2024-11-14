@@ -63,15 +63,16 @@ with chat_container:
         st.markdown(f"**You**: {entry['question']}")
         st.write(f"🧑‍🏫: {entry['answer']}")
 
-# Fixed position for the note and input field at the bottom with CSS styling
+# Fixed position for the note and input field with alignment adjustments for sidebar visibility
 st.markdown(
     """
     <style>
+    /* Ensure the input bar and note are aligned and always visible */
     .stTextInput {
         position: fixed;
         bottom: 10px;
-        width: 90%;
-        left: 5%;
+        width: calc(100% - 350px);  /* Adjust width to account for sidebar */
+        left: 350px;  /* Align to main content area to avoid sidebar overlap */
         border-radius: 20px;
         border: 1px solid #555;
         padding: 12px;
@@ -81,8 +82,8 @@ st.markdown(
     .note {
         position: fixed;
         bottom: 60px;
-        width: 90%;
-        left: 5%;
+        width: calc(100% - 350px); /* Adjust width to account for sidebar */
+        left: 350px;  /* Align to main content area */
         font-size: 14px;
         color: #aaa;
         text-align: center;
@@ -103,5 +104,6 @@ st.text_input(
     "Enter your question below:", 
     placeholder="Say Something...", 
     key="user_prompt", 
-    on_change=generate_response
+    on_change=generate_response,
+    label_visibility="collapsed"
 )
