@@ -12,9 +12,10 @@ if 'chat_history' not in st.session_state:
 
 def display_chat_history():
     for i, entry in enumerate(st.session_state['chat_history']):
-        with st.sidebar.expander(f"Question {i + 1}", expanded=False):
-            st.write(f"**Q:** {entry.get('question', 'N/A')}")
-            st.write(f"**A:** {entry.get('answer', 'N/A')}")
+        if entry.get('question') and entry.get('answer'):
+            with st.sidebar.expander(f"Question {i + 1}", expanded=False):
+                st.write(f"**Q:** {entry['question']}")
+                st.write(f"**A:** {entry['answer']}")
 
 # Display chat history in the sidebar
 display_chat_history()
@@ -53,19 +54,31 @@ def generate_response():
             st.session_state.response_text = response_text
             # Save the interaction in chat history
             st.session_state.chat_history.append({"question": user_prompt, "answer": response_text})
-    else:
-        st.session_state.response_text = "Please enter a query before pressing Enter."
 
 # Main chat section with scrolling feature
 st.subheader("Ask your Pega-related question:")
 chat_container = st.container()
 with chat_container:
-    if 'response_text' in st.session_state:
-        for entry in st.session_state['chat_history']:
-            st.markdown(f"**You**: {entry.get('question', 'N/A')}")
-            st.write(f"🧑‍🏫: {entry.get('answer', 'N/A')}")
+    for entry in st.session_state['chat_history']:
+        st.markdown(f"**You**: {entry['question']}")
+        st.write(f"🧑‍🏫: {entry['answer']}")
 
-# Fixed position for the input field at the bottom
+# Fixed position for the input field at the bottom with CSS styling
+st.markdown(
+    """
+    <style>
+    .stTextInput {
+        position: fixed;
+        bottom: 10px;
+        width: 90%;
+        margin-left: 5%;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Input field for the user's question
 st.text_input(
     "Enter your question below:", 
     placeholder="E.g., How does Pega manage workflows?", 
