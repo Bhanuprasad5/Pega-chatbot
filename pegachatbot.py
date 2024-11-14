@@ -3,16 +3,24 @@ import streamlit as st
 from PIL import Image
 
 # Set up Streamlit page configuration
-st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="centered")
+st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="wide")
 
 # Load and display logo/image
 image = Image.open("pega.jpeg")
-col1, col2 = st.columns([1, 3])
-with col1:
-    st.image(image, width=120)
-with col2:
-    st.title("Pega Tutor Application")
-    st.write("An expert AI-powered tutor to help with your Pega-related questions.")
+
+# Session state initialization for chat history
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+
+# Define the function to generate responses and maintain chat history
+def generate_response():
+    user_prompt = st.session_state.user_prompt
+    if user_prompt:
+        with st.spinner("Generating answer..."):
+            response = model.generate_content(user_prompt)
+            # Save conversation history
+            st.session_state.chat_history.append((user_prompt, response.text))
+            st.session_state.user_prompt = ""  # Clear the input box
 
 # Configure API key
 genai.configure(api_key="AIzaSyDhzLev5d_V46XA7KQrmg4u90M_g2Xq8Kc")
@@ -29,43 +37,31 @@ decline and remind them to ask questions only related to Pega platform.
 # Initialize the generative model
 model = genai.GenerativeModel(model_name="models/gemini-1.5-flash", system_instruction=sys_prompt)
 
-# Initialize session state for chat history
-if "history" not in st.session_state:
-    st.session_state.history = []
+# Layout setup: sidebar for chat history and main area for question/response
+with st.sidebar:
+    st.image(image, width=120)
+    st.title("Pega Tutor Application")
+    st.write("An expert AI-powered tutor to help with your Pega-related questions.")
+    st.markdown("### Chat History")
+    for user_question, ai_response in st.session_state.chat_history:
+        with st.expander(user_question):
+            st.write(f"🧑‍🏫: {ai_response}")
 
-# Function to generate response
-def generate_response():
-    user_prompt = st.session_state.user_prompt
-    if user_prompt:
-        with st.spinner("Generating answer..."):
-            response = model.generate_content(user_prompt)
-            # Add user prompt and AI response to history
-            st.session_state.history.append({"user": user_prompt, "bot": response.text})
-            # Clear the input field after submission
-            st.session_state.user_prompt = ""
-
-# Display chat history in a scrollable format
-st.subheader("Chat History")
-chat_container = st.container()
-with chat_container:
-    for chat in st.session_state.history:
-        st.markdown(f"**You**: {chat['user']}")
-        st.markdown(f"**Tutor**: {chat['bot']}")
-
-# Fixed input box at the bottom for user query
+# Main content layout
+st.subheader("Ask your Pega-related question:")
 st.write("---")
+
+# Display chat history in main window for a larger view
+for user_question, ai_response in st.session_state.chat_history:
+    st.markdown(f"**You:** {user_question}")
+    st.write(f"🧑‍🏫: {ai_response}")
+    st.write("---")
+
+# Bottom input area fixed with `st.text_input` for user prompt
 st.text_input(
-    "Ask your Pega-related question:", 
+    "Enter your question below:", 
     placeholder="E.g., How does Pega manage workflows?", 
     key="user_prompt", 
-    on_change=generate_response
+    on_change=generate_response,
+    label_visibility="collapsed",
 )
-
-# Button for generating a response
-btn_click = st.button("Generate Answer")
-
-if btn_click:
-    generate_response()
-
-# Display footer or additional help text
-st.info("Note: This AI Tutor answers questions specifically about the Pega platform. For other topics, please use other resources.")
