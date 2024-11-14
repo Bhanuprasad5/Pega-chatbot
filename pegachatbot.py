@@ -54,7 +54,7 @@ if human_prompt:
     st.session_state.user_prompt = human_prompt
     generate_response()
 
-# Button for generating a response
+Button for generating a response
 #btn_click = st.button("Generate Answer")
 
 if btn_click:
