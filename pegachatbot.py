@@ -6,7 +6,7 @@ from PIL import Image
 st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="wide")
 
 # Load and display logo/image
-image = Image.open("pega.jpeg")
+#image = Image.open("pega.jpeg")
 col1, col2 = st.columns([1, 3])
 with col1:
     st.image(image, width=250)  # Increased the width to 150
