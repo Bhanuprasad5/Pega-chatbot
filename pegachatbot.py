@@ -15,7 +15,7 @@ with col2:
     st.write("An expert AI-powered tutor to help with your Pega-related questions.")
 
 # Configure API key
-genai.configure(api_key="AIzaSyDhzLev5d_V46XA7KQrmg4u90M_g2Xq8Kc")
+genai.configure(api_key="AIzaSyB-7cKMdUpA5kTccpNxd72IT5CjeSgSmkc")
 
 # System prompt for the generative model
 sys_prompt = """
