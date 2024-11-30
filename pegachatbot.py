@@ -1,6 +1,6 @@
 import google.generativeai as genai
 import streamlit as st
-from PIL import Image
+from PIL import image
 
 # Set up Streamlit page configuration
 st.set_page_config(page_title="Pega Tutor", page_icon="🎓", layout="wide")
